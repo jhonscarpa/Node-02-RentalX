@@ -1,16 +1,26 @@
-import { Category } from '../model/category'
+import { Category } from '../../model/category'
+import { ICategoriesRepository } from '../ICategoriesRepository'
 
 interface ICreateCategoryDTO {
   name: string
   description: string
 }
 
-class CategoriesRepository {
+export class CategoriesRepository implements ICategoriesRepository {
   private categories: Category[]
+  // eslint-disable-next-line
+  private static INSTANCE: CategoriesRepository
 
-  constructor() {
+  private constructor() {
     this.categories = []
   }
+  public static getInstace(): CategoriesRepository {
+    if (!CategoriesRepository.INSTANCE) {
+      CategoriesRepository.INSTANCE = new CategoriesRepository()
+    }
+    return CategoriesRepository.INSTANCE
+  }
+
   create({ name, description }: ICreateCategoryDTO): void {
     const category = new Category()
 
@@ -33,5 +43,3 @@ class CategoriesRepository {
     return category
   }
 }
-
-export { CategoriesRepository }
